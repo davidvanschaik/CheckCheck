@@ -1,0 +1,14 @@
+{
+  "autoload": {
+    "psr-4": {
+      "Game\\": "Game/",
+      "Board\\": "Board/",
+      "Player\\": "Player/",
+      "Validation\\": "Validation/",
+      "Response\\": "Response/"
+    }
+  },
+  "require": {
+    "ext-readline": "*"
+  }
+}
