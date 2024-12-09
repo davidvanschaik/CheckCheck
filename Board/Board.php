@@ -11,27 +11,35 @@ class Board
 
     public function __construct()
     {
+        $row = 9;
         $this->color = new Color();
-        for ($row = 0; $row < 10; $row++) {
-            $rowSquares = [];
-            for ($col = 0; $col < 10; $col++) {
-                $position = new Position("$row,$col");
-                $color = ($row + $col) % 2 == 0 ? 'white' : 'black';
-                $stone = $this->getStone($row, $color);
+        do {
+            $this->rows[] = $this->createRows($row);
+            $row--;
+        } while ($row > -1);
+    }
 
-                $rowSquares[] = new Square($position, $color, $stone);
-            }
-            $this->rows[] = $rowSquares;
-        }
+    private function createRows(int $row): array
+    {
+        $col = 0;
+        $rowSquares = [];
+        do {
+            $position = new Position("$col,$row");
+            $color = ($row + $col) % 2 == 0 ? 'black' : 'white';
+            $rowSquares[] = new Square($position, $color, $this->getStone($row, $color));
+
+            $col++;
+        } while ($col < 10);
+        return $rowSquares;
     }
 
     private function getStone(int $row, string $color): Stone | null
     {
         if ($color === 'white') {
             if ($row < 4) {
-                return new Stone('white');
-            } elseif ($row > 5) {
                 return new Stone('black');
+            } elseif ($row > 5) {
+                return new Stone('white');
             }
         }
         return null;
@@ -39,11 +47,10 @@ class Board
 
     public function showBoard(): void
     {
-        $rowNumber = 0;
-        $this->printColumn();
+        $rowNumber = 9;
 
         foreach ($this->rows as $row) {
-            $this->printNumbers($rowNumber++);
+            $this->printNumbers($rowNumber--);
             foreach ($row as $square) {
                 $backgroundColor = $square->color === 'white' ? 'light_gray' : 'black';
                 $stone = isset($square->stone) ? "()" : "  ";
@@ -53,9 +60,10 @@ class Board
             }
             print_r(PHP_EOL);
         }
+        $this->printColumn();
     }
 
-    private function getStoneColor(Square $square): null | string
+    private function setStoneColor(Square $square): null | string
     {
         if (isset($square->stone)) {
             return $square->stone->color === 'white' ? 'light_gray' : 'black';
@@ -65,7 +73,7 @@ class Board
 
     private function printNumbers(int $number): void
     {
-        print_r($this->color->getColoredString($number++ . " ", "white", "magenta"));
+        print_r($this->color->getColoredString($number . " ", "white", "magenta"));
     }
 
     private function printColumn(): void
@@ -79,16 +87,12 @@ class Board
 
     public function getRows($position): Square
     {
-        list($x, $y) = explode(',', $position);
-        $match = '';
-
         foreach ($this->rows as $row) {
             foreach ($row as $square) {
-                if ($square->getPosition($x, $y)) {
-                    $match = $square;
+                if ($square->matchPosition($position)) {
+                    return $square;
                 }
             }
         }
-        return $match;
     }
 }
