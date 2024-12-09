@@ -14,10 +14,10 @@ class ValidateContainsOpponentStone implements Rules
         if (! (new ValidateContainsStone())->validate($move, $board, $player)) {
             return false;
         }
-        return count($this->containOpponentStone($move->startPos, $board, $player)) > 0;
+        return $this->containOpponentStone($move->startPos, $board, $player);
     }
 
-    public function containOpponentStone(Position $position, Board $board, Player $player): array
+    public function containOpponentStone(Position $position, Board $board, Player $player): bool
     {
         $moveY = $position->y + ($player->color === 'white' ? +1 : -1);
         $contains = [];
@@ -29,6 +29,6 @@ class ValidateContainsOpponentStone implements Rules
                 $contains[] = $square->stone;
             }
         }
-        return $contains;
+        return ! is_null($contains);
     }
 }

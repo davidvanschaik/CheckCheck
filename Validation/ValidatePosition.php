@@ -14,7 +14,7 @@ class ValidatePosition implements Rules
         return $this->validatePosition([$move->startPos, $move->endPos]);
     }
 
-    private function validatePosition(array $positions): bool
+    public function validatePosition(array $positions): bool
     {
         foreach ($positions as $position) {
             if ($position->x > 9 || $position->x < 0) {

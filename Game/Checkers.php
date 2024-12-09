@@ -3,6 +3,9 @@
 namespace Game;
 
 use Board\Board;
+use Validation\ValidateAvailableCaptures;
+use Validation\ValidateAvailableMoves;
+use Validation\ValidateAvailableStones;
 
 class Checkers
 {
@@ -25,6 +28,7 @@ class Checkers
             $this->board->showBoard($this->board);
             [$startPosition, $endPosition] = $this->getPlayerMove();
             $move = $this->players[$this->activePlayer]->setMove($startPosition, $endPosition);
+            var_dump((new ValidateAvailableCaptures())->validate($move, $this->board, $this->players[$this->activePlayer]));
         }
     }
 

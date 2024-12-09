@@ -36,7 +36,7 @@ class Board
     private function getStone(int $row, string $color): Stone | null
     {
         if ($color === 'white') {
-            if ($row < 4) {
+            if ($row < 4 || $row === 5) {
                 return new Stone('black');
             } elseif ($row > 5) {
                 return new Stone('white');
@@ -63,7 +63,7 @@ class Board
         $this->printColumn();
     }
 
-    private function setStoneColor(Square $square): null | string
+    private function getStoneColor(Square $square): null | string
     {
         if (isset($square->stone)) {
             return $square->stone->color === 'white' ? 'light_gray' : 'black';
@@ -85,13 +85,14 @@ class Board
         print_r(PHP_EOL);
     }
 
-    public function getRows($position): Square
+    public function getRows($position): Square | string
     {
         foreach ($this->rows as $row) {
             foreach ($row as $square) {
                 if ($square->matchPosition($position)) {
                     return $square;
                 }
+                return '';
             }
         }
     }

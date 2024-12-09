@@ -4,6 +4,7 @@ namespace Validation;
 
 use Board\Board;
 use Board\Position;
+use Board\Square;
 use Player\Move;
 use Player\Player;
 use Validation\Rules;
@@ -12,34 +13,35 @@ class ValidateAvailableMoves implements Rules
 {
     public function validate(Move $move, Board $board, Player $player): array
     {
-        $moveDirection = ($player->color === 'white' ? -1 : +1);
-        $availableSquares = (new ValidateAvailableStones())->validate($move, $board, $player);
-        $availableMoves = [];
+        $availableStones = (new ValidateAvailableStones())->validate($move, $board, $player);
+        $moveY = $player->color === 'white' ? -1 : +1;
 
-        foreach ($availableSquares as $stonePosition) {
-            $availableMoves[] = $this->availableMoves($stonePosition->position, [+1, -1], $moveDirection, $board, $move);
-        }
-        return $availableMoves;
+        return array_reduce($availableStones, function ($acc, $stone) use ($moveY, $board, $move) {
+            $stonePosition = $this->setPosition($stone->position->x, $stone->position->y);
+            $this->validateAvailableMoves($stone, $stonePosition, $moveY, $board);
+            return array_merge($acc, $this->validateAvailableMoves($stone, $stonePosition, $moveY, $board));
+        }, []);
     }
 
-    private function availableMoves($stonePosition, array $moveX, int $moveY, Board $board, Move $move): array
+    private function setPosition(int $x, int $y): string
     {
-        $availableMoves = [];
-        foreach ($moveX as $direction) {
-            $moveTo = new Position($this->setPositions($stonePosition->x + $direction, $stonePosition->y + $moveY));
+        return "$x,$y";
+    }
+
+    private function validateAvailableMoves(Square $stone, string $stonePosition, int $moveY, $board): array
+    {
+        $acc = [];
+        $positionDirection = [- 1, + 1];
+
+        foreach ($positionDirection as $direction) {
+            $moveToPosition = $this->setPosition($stone->position->x + $direction, $stone->position->y + $moveY);
             if (
-                (new ValidatePosition())->validatePosition([$moveTo])
-                && ! (new ValidateContainsStone())->containsStone($board, $move)
+                (new ValidatePosition())->validatePosition([new Position($moveToPosition)]) &&
+                ! (new ValidateContainsStone())->containsStone($board, new Move($stonePosition, $moveToPosition))
             ) {
-                $availableMoves[] = new Move("{$stonePosition->x},{$stonePosition->y}", $this->setPositions($stonePosition->x + $direction, $stonePosition->y + $moveY));
+                $acc[] = new Move("$stonePosition", $moveToPosition);
             }
         }
-        var_dump($availableMoves);
-        die;
-    }
-
-    private function setPositions(int $a, int $b): string
-    {
-       return "$a,$b";
+        return $acc;
     }
 }
