@@ -10,7 +10,7 @@ class ValidatePlayer implements Rules
 {
     public function validate(Move $move, Board $board, Player $player): bool
     {
-        $square = $board->getRows("{$move->startPos->x},{$move->startPos->y}");
+        $square = $board->getRows($move->startPos);
         return $square->stone->color === $player->color;
     }
 }
