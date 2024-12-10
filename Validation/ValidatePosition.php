@@ -9,6 +9,10 @@ use Player\Player;
 
 class ValidatePosition implements Rules
 {
+    /**
+     * @return bool
+     * Validates if the current move positions are valid position on the board
+     */
     public function validate(Move $move, Board $board, Player $player): bool
     {
         foreach ([$move->startPos, $move->endPos] as $position) {
