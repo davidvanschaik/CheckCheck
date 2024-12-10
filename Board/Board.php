@@ -9,6 +9,9 @@ class Board
     public array $rows;
     public Color $color;
 
+    /**
+     * Generating the rows with array of columns
+     */
     public function __construct()
     {
         $row = 9;
@@ -19,6 +22,11 @@ class Board
         } while ($row > -1);
     }
 
+    /**
+     * @param int $row
+     * @return Square[]
+     * Generating columns with array of Square instances with Position, Stone, Color and King
+     */
     private function createRows(int $row): array
     {
         $col = 0;
@@ -33,10 +41,16 @@ class Board
         return $rowSquares;
     }
 
+    /**
+     * @param int $row
+     * @param string $color
+     * @return Stone|null
+     * Determine where on the board the stones will be placed
+     */
     private function getStone(int $row, string $color): Stone | null
     {
         if ($color === 'white') {
-            if ($row < 4 || $row === 5) {
+            if ($row < 4) {
                 return new Stone('black');
             } elseif ($row > 5) {
                 return new Stone('white');
@@ -45,7 +59,7 @@ class Board
         return null;
     }
 
-    public function showBoard(self $board): void
+    public function showBoard(): void
     {
         $rowNumber = 9;
 
@@ -85,13 +99,17 @@ class Board
         print_r(PHP_EOL);
     }
 
+    /**
+     * @param Position $position
+     * @return Square|null
+     * Matches @Square with giving @Position
+     */
     public function getRows(Position $position): Square | null
     {
         foreach ($this->rows as $row) {
-            foreach ($row as $square) {
-                if ($square->matchPosition($position)) {
-                    return $square;
-                }
+            $square = array_filter($row, fn ($square) => $square->matchPosition($position));
+            if (! empty($square)) {
+                return array_values($square)[0];
             }
         }
         return null;

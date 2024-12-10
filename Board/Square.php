@@ -20,6 +20,9 @@ class Square
         $this->king = $king;
     }
 
+    /**
+     * When a stone has made it all across the board it will change into a King
+     */
     public function setKing(): void
     {
         $this->king = new King($this->stone->color);
