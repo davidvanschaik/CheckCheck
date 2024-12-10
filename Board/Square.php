@@ -12,11 +12,12 @@ class Square
     public null | Stone $stone;
     public null | King $king;
 
-    public function __construct(Position $position, string $color, Stone $stone = null, King $dam = null)
+    public function __construct(Position $position, string $color, Stone $stone = null, King $king = null)
     {
         $this->position = $position;
         $this->color = $color;
         $this->stone = $stone;
+        $this->king = $king;
     }
 
     public function setKing(): void
@@ -25,9 +26,8 @@ class Square
         unset($this->stone);
     }
 
-    public function matchPosition(string $position): bool
+    public function matchPosition(Position $position): bool
     {
-        list($x, $y) = explode(',', $position);
-        return $this->position->x === intval($x) && $this->position->y === intval($y);
+        return $position->match($this->position->x, $this->position->y);
     }
 }

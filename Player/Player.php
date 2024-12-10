@@ -13,7 +13,7 @@ class Player
         $this->color = $color;
     }
 
-    public function setMove(string $startPosition, string $endPosition): Move
+    public function setMove(Position $startPosition, Position $endPosition): Move
     {
         return new Move($startPosition, $endPosition);
     }

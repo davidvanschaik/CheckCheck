@@ -24,7 +24,7 @@ class Board
         $col = 0;
         $rowSquares = [];
         do {
-            $position = new Position("$col,$row");
+            $position = new Position($col, $row);
             $color = ($row + $col) % 2 == 0 ? 'black' : 'white';
             $rowSquares[] = new Square($position, $color, $this->getStone($row, $color));
 
@@ -45,7 +45,7 @@ class Board
         return null;
     }
 
-    public function showBoard(): void
+    public function showBoard(self $board): void
     {
         $rowNumber = 9;
 
@@ -85,15 +85,15 @@ class Board
         print_r(PHP_EOL);
     }
 
-    public function getRows($position): Square | string
+    public function getRows(Position $position): Square | null
     {
         foreach ($this->rows as $row) {
             foreach ($row as $square) {
                 if ($square->matchPosition($position)) {
                     return $square;
                 }
-                return '';
             }
         }
+        return null;
     }
 }

@@ -9,9 +9,9 @@ class Move
     public Position $startPos;
     public Position $endPos;
 
-    public function __construct(string $startPosition, string $endPosition)
+    public function __construct(Position $startPosition, Position $endPosition)
     {
-        $this->startPos = new Position($startPosition);
-        $this->endPos = new Position($endPosition);
+        $this->startPos = $startPosition;
+        $this->endPos = $endPosition;
     }
 }

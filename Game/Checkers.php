@@ -3,9 +3,8 @@
 namespace Game;
 
 use Board\Board;
+use Board\Position;
 use Validation\ValidateAvailableCaptures;
-use Validation\ValidateAvailableMoves;
-use Validation\ValidateAvailableStones;
 
 class Checkers
 {
@@ -35,9 +34,15 @@ class Checkers
     private function getPlayerMove(): array
     {
         $color = ucfirst($this->players[$this->activePlayer]->color);
-        $startPosition = readline("\n \nIt's $color's turn. Please select a stone to move. (x,y)");
-        $endPosition = readline("Choose the destination for your stone (format: x,y) ");
+        $startPosition = $this->setPosition(readline("\n \nIt's $color's turn. Please select a stone to move. (x,y) "));
+        $endPosition = $this->setPosition(readline("Choose the destination for your stone (format: x,y) "));
 
         return [$startPosition, $endPosition];
+    }
+
+    private function setPosition(string $position): Position
+    {
+        list($x, $y) = explode(',', $position);
+        return new Position($x, $y);
     }
 }

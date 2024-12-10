@@ -7,9 +7,10 @@ class Position
     public int $x;
     public int $y;
 
-    public function __construct(string $position)
+    public function __construct(int $x, int $y)
     {
-        list($this->x, $this->y) = explode(',', $position);
+        $this->x = $x;
+        $this->y = $y;
     }
 
     public function match(int $x, int $y): bool
