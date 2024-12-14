@@ -9,5 +9,6 @@ return array(
     'Validation\\' => array($baseDir . '/Validation'),
     'Player\\' => array($baseDir . '/Player'),
     'Game\\' => array($baseDir . '/Game'),
+    'Console\\' => array($baseDir . '/Console'),
     'Board\\' => array($baseDir . '/Board'),
 );

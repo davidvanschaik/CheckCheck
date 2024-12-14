@@ -19,6 +19,10 @@ class ComposerStaticInit2a6f5b9d2136bd2170446d87ecc7473b
         array (
             'Game\\' => 5,
         ),
+        'C' => 
+        array (
+            'Console\\' => 8,
+        ),
         'B' => 
         array (
             'Board\\' => 6,
@@ -37,6 +41,10 @@ class ComposerStaticInit2a6f5b9d2136bd2170446d87ecc7473b
         'Game\\' => 
         array (
             0 => __DIR__ . '/../..' . '/Game',
+        ),
+        'Console\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Console',
         ),
         'Board\\' => 
         array (
