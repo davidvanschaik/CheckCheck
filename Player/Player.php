@@ -4,7 +4,6 @@ namespace Player;
 
 use Board\Board;
 use Board\Position;
-use Board\Square;
 
 class Player
 {
@@ -23,11 +22,9 @@ class Player
     public function executeMove(Move $move, Board $board): void
     {
         $startSquare = $board->getRows($move->startPos);
-        $endSquare = $board->getRows($move->endPos);
-        $endSquare->stone = $startSquare->stone;
+        ($board->getRows($move->endPos))->stone = $startSquare->stone;
         $startSquare->stone = null;
         $this->captureStone($move, $board);
-        system('clear');
     }
 
     /**
@@ -42,6 +39,16 @@ class Player
             $moveOverX = $move->startPos->x + ($move->endPos->x - $move->startPos->x) / 2;
             $moveOverY = $move->startPos->y + ($move->endPos->y - $move->startPos->y) / 2;
             $board->getRows(new Position($moveOverX, $moveOverY))->stone = null;
+        }
+        $this->setKing($move, $board);
+    }
+
+    private function setKing(Move $move, Board $board): void
+    {
+        $y = $this->color === 'white' ? 0 : 9;
+        if ($move->endPos->y === $y) {
+            $square = $board->getRows(new Position($move->endPos->x, $move->endPos->y));
+            $square->stone = new King($this->color);
         }
     }
 }
