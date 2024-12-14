@@ -2,10 +2,8 @@
 
 namespace Player;
 
-class King
+class King extends Pieces
 {
-    public string $color;
-
     public function __construct($color)
     {
         $this->color = $color;
