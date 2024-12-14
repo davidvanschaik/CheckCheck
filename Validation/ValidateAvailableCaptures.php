@@ -37,7 +37,7 @@ class ValidateAvailableCaptures implements Rules
     {
         $availableStones = $this->getAvailableStones($move, $board, $player);
         return array_reduce($availableStones, function ($captures, $square) use ($move, $board, $player) {
-            $moveY = ($player->color === 'white' ? -1 : 1);
+            $moveY = ($player->color === 'white' ? - 1 : + 1);
             $position = $square->position;
             return array_merge($captures, $this->validateAvailableCaptures($moveY, $position, $board, $player));
         }, []);
@@ -61,16 +61,24 @@ class ValidateAvailableCaptures implements Rules
         $availableCaptures = [];
         $moveFrom = new Position($position->x, $position->y);
 
-        foreach ([+2, -2] as $direction) {
-            $moveTo = new Position($position->x + $direction, $position->y + ($moveY * 2));
-            $moveOver = new Position($position->x + ($direction / 2), $position->y + $moveY);
-            if (
-                (new ValidatePosition())->validatePosition($moveTo) &&
-                ! (new ValidateContainsStone())->containsStone($board, $moveTo) &&
-                (new ValidateContainsStone())->containOpponentStone($moveFrom, $board, $player)
-            ) {
-                $availableCaptures[] = new Move($position, $moveTo);
-            }
+        $moveTo = new Position(($position->x + 2), ($position->y + ($moveY * 2)));
+        $moveOver = new Position(($position->x + 1), ($position->y + $moveY));
+        if (
+            (new ValidatePosition())->validatePosition($moveTo) &&
+            (new ValidateContainsStone())->containOpponentStone($moveFrom, $board, $player) &&
+            ! (new ValidateContainsStone())->containsStone($board, $moveTo)
+        ) {
+            $availableCaptures[] = new Move($position, $moveTo);
+        }
+
+        $moveTo = new Position(($position->x - 2), ($position->y + ($moveY * 2)));
+        $moveOver = new Position(($position->x + - 1), ($position->y + $moveY));
+        if (
+            (new ValidatePosition())->validatePosition($moveTo) &&
+            ! (new ValidateContainsStone())->containsStone($board, $moveTo) &&
+            (new ValidateContainsStone())->containOpponentStone($moveFrom, $board, $player)
+        ) {
+            $availableCaptures[] = new Move($position, $moveTo);
         }
         return $availableCaptures;
     }
@@ -82,7 +90,7 @@ class ValidateAvailableCaptures implements Rules
     public function getAvailableMoves(Move $move, Board $board, Player $player): array
     {
         $availableStones = $this->getAvailableStones($move, $board, $player);
-        $moveY = $player->color === 'white' ? -1 : +1;
+        $moveY = $player->color === 'white' ? - 1 : + 1;
         return array_reduce($availableStones, function ($availableMoves, $stone) use ($moveY, $board, $move) {
             $stonePosition = new Position($stone->position->x, $stone->position->y);
             return array_merge($availableMoves, $this->validateAvailableMoves($stone, $stonePosition, $moveY, $board));

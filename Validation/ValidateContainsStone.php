@@ -4,6 +4,7 @@ namespace Validation;
 
 use Board\Board;
 use Board\Position;
+use Board\Square;
 use Player\Move;
 use Player\Player;
 
@@ -16,7 +17,7 @@ class ValidateContainsStone implements Rules
     public function validate(Move $move, Board $board, Player $player): bool
     {
         return  $this->containsStone($board, $move->endPos) &&
-                $this->containOpponentStone($move->startPos, $board, $player);
+            $this->containOpponentStone($move->startPos, $board, $player);
     }
 
     /**
@@ -27,10 +28,7 @@ class ValidateContainsStone implements Rules
     public function containsStone(Board $board, Position $position): bool
     {
         $square = $board->getRows($position);
-        if (is_object($square) && property_exists($square, 'stone')) {
-            return ! is_null($square->stone);
-        }
-        return false;
+        return $square !== null && $square->stone !== null;
     }
 
     /**
@@ -43,15 +41,26 @@ class ValidateContainsStone implements Rules
     public function containOpponentStone(Position $position, Board $board, Player $player): bool
     {
         $moveY = $position->y + ($player->color === 'white' ? - 1 : + 1);
-        $contains = [];
+        $directions = [+ 1, -1 ];
 
-        foreach ([$position->x + 1, $position->x - 1] as $direction) {
+        foreach ($directions as $dir) {
+            $direction = $position->x + $dir;
             $square = $board->getRows(new Position($direction, $moveY));
-
-            if (! is_null($square?->stone) && $square->stone->color !== $player->color) {
-                $contains[] = $square;
+            if (
+                $square !== null &&
+                $square->stone !== null &&
+                $square->stone->color !== $player->color &&
+                !$this->isOnBorder($direction)
+            ) {
+                return true;
             }
         }
-        return ! empty($contains);
+        return false;
+    }
+
+    private function isOnBorder(int $x): bool
+    {
+        // Assuming the board size is 8x8
+        return $x < 1 || $x > 9;
     }
 }
