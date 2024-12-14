@@ -5,6 +5,7 @@ namespace Game;
 use Board\Board;
 use Board\Position;
 use Player\Move;
+use Console\Response;
 use Validation\RuleValidator;
 
 class Checkers
@@ -13,6 +14,7 @@ class Checkers
     private array $players;
     private int $activePlayer;
     private bool $winner;
+    private Response $response;
 
     public function __construct(array $players)
     {
@@ -20,12 +22,13 @@ class Checkers
         $this->activePlayer = 0;
         $this->players = $players;
         $this->winner = false;
+        $this->response = new Response();
     }
 
     public function start(): void
     {
         while (! $this->winner) {
-            $this->board->showBoard();
+            $this->response->showBoard($this->board, $this->players[$this->activePlayer]);
             $move = $this->getPlayerMove();
             $this->validateRules($move);
         }
@@ -33,9 +36,9 @@ class Checkers
 
     private function getPlayerMove(): Move
     {
-        $color = ucfirst($this->players[$this->activePlayer]->color);
-        $startPosition = $this->setPosition(readline("\n \nIt's $color's turn. Please select a stone to move. (x,y) "));
+        $startPosition = $this->setPosition(readline("\n \nPlease select a stone to move. (x,y) "));
         $endPosition = $this->setPosition(readline("Choose where you want to move your stone. (x,y) "));
+
         return $this->players[$this->activePlayer]->setMove($startPosition, $endPosition);
     }
 
