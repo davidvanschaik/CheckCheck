@@ -2,31 +2,20 @@
 
 namespace Board;
 
-use Player\King;
+use Player\Pieces;
 use Player\Stone;
 
 class Square
 {
     public Position $position;
     public string $color;
-    public null | Stone $stone;
-    public null | King $king;
+    public null | Pieces $stone;
 
-    public function __construct(Position $position, string $color, Stone $stone = null, King $king = null)
+    public function __construct(Position $position, string $color, Stone $stone = null)
     {
         $this->position = $position;
         $this->color = $color;
         $this->stone = $stone;
-        $this->king = $king;
-    }
-
-    /**
-     * When a stone has made it all across the board it will change into a King
-     */
-    public function setKing(): void
-    {
-        $this->king = new King($this->stone->color);
-        unset($this->stone);
     }
 
     public function matchPosition(Position $position): bool
