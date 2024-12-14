@@ -5,7 +5,7 @@
       "Board\\": "Board/",
       "Player\\": "Player/",
       "Validation\\": "Validation/",
-      "Response\\": "Response/"
+      "Console\\": "Console/"
     }
   },
   "require": {
