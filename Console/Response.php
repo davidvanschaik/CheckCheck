@@ -10,7 +10,7 @@ class Response
     public function showBoard(Board $board, $activePlayer): void
     {
         echo "\033[2J\033[H";
-        $rowNumber = 9;
+        $rowNumber = 7;
         $margin = $this->margin($board);
         echo " $margin It's " . ucfirst($activePlayer->color) . "'s turn \n \n \n";
 
@@ -38,7 +38,7 @@ class Response
     private function getStoneOrKing(Square $square): string
     {
         if (isset($square->stone) && $square->stone->captureBackwards($square->stone)) {
-            return "𝐊♛";
+            return $square->stone->color === 'white' ? "𝐊♛" : "♛𝐊";
         }
         if (isset($square->stone)) {
             return "()";
@@ -62,7 +62,7 @@ class Response
     private function printColumn(): void
     {
         print_r(Colors::getColoredString("  ", "white"));
-        for ($columnNumber = 0; $columnNumber < 10; $columnNumber++) {
+        for ($columnNumber = 0; $columnNumber < 8; $columnNumber++) {
             $this->printNumbers($columnNumber);
         }
         print_r(PHP_EOL);

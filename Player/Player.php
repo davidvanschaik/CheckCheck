@@ -45,7 +45,7 @@ class Player
 
     private function setKing(Move $move, Board $board): void
     {
-        $y = $this->color === 'white' ? 0 : 9;
+        $y = $this->color === 'white' ? 0 : 7;
         if ($move->endPos->y === $y) {
             $square = $board->getRows(new Position($move->endPos->x, $move->endPos->y));
             $square->stone = new King($this->color);

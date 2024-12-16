@@ -38,14 +38,13 @@ class ValidateContainsStone implements Rules
      * @return bool
      * Validate based on the giving position and current player if position contains opponent stone
      */
-    public function containOpponentStone(Position $position, Board $board, Player $player): bool
+    public function containOpponentStone(Position $position, Board $board, Player $player, int $moveY): bool
     {
-        $moveY = $position->y + ($player->color === 'white' ? - 1 : + 1);
-        $directions = [+ 1, -1 ];
+        $directions = [+ 1, -1];
 
         foreach ($directions as $dir) {
             $direction = $position->x + $dir;
-            $square = $board->getRows(new Position($direction, $moveY));
+            $square = $board->getRows(new Position($direction, $position->y + $moveY));
             if (
                 $square !== null &&
                 $square->stone !== null &&
@@ -60,7 +59,19 @@ class ValidateContainsStone implements Rules
 
     private function isOnBorder(int $x): bool
     {
-        // Assuming the board size is 8x8
         return $x < 1 || $x > 9;
+    }
+
+    public function getAllStones(Board $board): array
+    {
+        $array = ['white' => [], 'black' => []];
+        foreach ($board->rows as $row) {
+            foreach ($row as $square) {
+                if ($square->stone !== null) {
+                    $array[$square->stone->color][] = $square;
+                }
+            }
+        }
+        return $array;
     }
 }

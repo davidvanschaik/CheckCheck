@@ -5,8 +5,8 @@
       <sourceFolder url="file://$MODULE_DIR$/Board" isTestSource="false" packagePrefix="Board\" />
       <sourceFolder url="file://$MODULE_DIR$/Game" isTestSource="false" packagePrefix="Game\" />
       <sourceFolder url="file://$MODULE_DIR$/Player" isTestSource="false" packagePrefix="Player\" />
-      <sourceFolder url="file://$MODULE_DIR$/Response" isTestSource="false" packagePrefix="Response\" />
       <sourceFolder url="file://$MODULE_DIR$/Validation" isTestSource="false" packagePrefix="Validation\" />
+      <sourceFolder url="file://$MODULE_DIR$/Console" isTestSource="false" packagePrefix="Console\" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
