@@ -10,7 +10,7 @@ class Response
     public function showBoard(Board $board, $activePlayer): void
     {
         echo "\033[2J\033[H";
-        $rowNumber = 7;
+        $rowNumber = 9;
         $margin = $this->margin($board);
         echo " $margin It's " . ucfirst($activePlayer->color) . "'s turn \n \n \n";
 
@@ -62,7 +62,7 @@ class Response
     private function printColumn(): void
     {
         print_r(Colors::getColoredString("  ", "white"));
-        for ($columnNumber = 0; $columnNumber < 8; $columnNumber++) {
+        for ($columnNumber = 0; $columnNumber < 10; $columnNumber++) {
             $this->printNumbers($columnNumber);
         }
         print_r(PHP_EOL);

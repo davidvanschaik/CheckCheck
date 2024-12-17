@@ -13,7 +13,7 @@ class Board
      */
     public function __construct()
     {
-        $row = 7;
+        $row = 9;
         do {
             $this->rows[] = $this->createRows($row);
             $row--;
@@ -35,7 +35,7 @@ class Board
             $rowSquares[] = new Square($position, $color, $this->getStone($row, $color));
 
             $col++;
-        } while ($col < 8);
+        } while ($col < 10);
         return $rowSquares;
     }
 
@@ -48,9 +48,9 @@ class Board
     private function getStone(int $row, string $color): Stone | null
     {
         if ($color === 'white') {
-            if ($row < 1) {
+            if ($row < 4) {
                 return new Stone('black');
-            } elseif ($row > 6) {
+            } elseif ($row > 5) {
                 return new Stone('white');
             }
         }
